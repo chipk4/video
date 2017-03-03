@@ -1,0 +1,203 @@
+{
+    "swagger": "2.0",
+    "host": "api.videostream.local:8080",
+    "info": {
+        "version": "0.1",
+        "title": "Video Stream"
+    },
+    "schemes": [
+        "http"
+    ],
+    "tags": [
+        {
+            "name": "Video",
+            "description": "All operation with videos"
+        },
+        {
+            "name": "Auth",
+            "description": "Authorisation methods, like login or logout"
+        }
+    ],
+    "basePath": "/api/v0.1",
+    "paths" : {
+      "/auth/login/" : {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "description": "Login user by email\n",
+          "parameters": [
+            {
+              "in": "formData",
+              "name": "email",
+              "description": "User email",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "formData",
+              "name": "password",
+              "description": "User password",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/definitions/Auth"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/video/upload/" : {
+        "post": {
+          "tags": [
+            "Video"
+          ],
+          "description": "Upload video\n",
+          "parameters": [
+            {
+              "in": "formData",
+              "name": "video",
+              "description": "Video vile",
+              "required": true,
+              "type": "file"
+            },
+            {
+              "in": "formData",
+              "name": "duration",
+              "description": "Video duration",
+              "required": true,
+              "type": "int"
+            },
+            {
+              "in": "formData",
+              "name": "start_time",
+              "description": "Start cutting from:",
+              "required": true,
+              "type": "int"
+            },
+            {
+              "in": "formData",
+              "name": "api_token",
+              "description": "Application API token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/definitions/ReturnWithMessage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/video/list/" : {
+        "post": {
+          "security": {
+            "Bearer": "[]"
+          },
+          "tags": [
+            "Video"
+          ],
+          "description": "Gel video list by user\n",
+          "parameters": [
+            {
+              "in": "formData",
+              "name": "api_token",
+              "description": "Application API token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/definitions/ReturnVideoCollection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+    "Auth": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "type": "string"
+        }
+      }
+    },
+    "ReturnWithMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ReturnWithData": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string"
+        }
+      }
+    },
+    "ReturnVideoCollection": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string"
+        }
+      }
+    },
+    "BadRequest": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "authorization-header",
+        "authenticationScheme": "Bearer"
+      }
+    }
+}
