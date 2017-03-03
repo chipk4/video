@@ -13,10 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['prefix' => 'v0.1'], function () {
-    Route::post('auth/login', 'AuthController@login');
+Route::group(['prefix' => 'v0.1', 'as' => 'api.'], function () {
+    Route::post('auth/login', 'AuthController@login')->name('login');
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('video/upload', 'VideoController@upload')->name('video_upload');
+    });
 });

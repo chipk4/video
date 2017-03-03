@@ -8,7 +8,9 @@
         "php": ">=5.6.4",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "league/fractal": "^0.15.0"
+        "league/fractal": "^0.15.0",
+        "php-ffmpeg/php-ffmpeg": "^0.9.2",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
