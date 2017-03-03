@@ -25,7 +25,7 @@ class VideoController extends BaseController
 
         $video = new AppVideo();
         $video->saveVideo($request);
-        $fileUrl = storage_path('app').DIRECTORY_SEPARATOR.$video->url;
+        $fileUrl = env('UPLOAD_PATH').DIRECTORY_SEPARATOR.$video->url;
 
         if($video->id) {
             $job = new UploadCutVideo($video, $fileUrl);

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'local',
+    'default' => 'file',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +53,22 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+
+        'file' => [
+            'driver' => 'local',
+            'root' => env('UPLOAD_PATH'),
+            'visibility' => 'public',
+            'permissions' => [
+                'file' => [
+                    'public' => 0744,
+                    'private' => 0700,
+                ],
+                'dir' => [
+                    'public' => 0777,
+                    'private' => 0700,
+                ]
+            ]
         ],
 
         's3' => [
