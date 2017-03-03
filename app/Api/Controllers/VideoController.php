@@ -1,9 +1,6 @@
 <?php
 namespace App\Api\Controllers;
 
-use App\Api\Transformers\VideoFile\Upload;
-use App\Helpers\File;
-use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
@@ -23,8 +20,6 @@ class VideoController extends BaseController
             return $this->respondWithError($validator->messages());
         }
 
-        $this->setTransformer(new Upload());
-
         $video = new AppVideo();
         $video->saveVideo($request);
         $fileUrl = storage_path('app').DIRECTORY_SEPARATOR.$video->url;
@@ -32,7 +27,7 @@ class VideoController extends BaseController
         if($video->id) {
             $job = new UploadCutVideo($video, $fileUrl);
             $this->dispatch($job);
-            return $this->respondWithItem($video->id);
+            return $this->respondWithMessage('File was added to queue');
         }
 
         return $this->respondWithError('Can not save video');

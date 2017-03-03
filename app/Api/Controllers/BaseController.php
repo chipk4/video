@@ -43,13 +43,21 @@ class BaseController extends Controller
      * Response with the current error.
      *
      * @param string $error
-     * @param integer $statusCode
      *
      * @return mixed
      */
-    protected function respondWithError($error, $statusCode = 400)
+    protected function respondWithError($error)
     {
-        return json_encode(['error' => $error]);
+        return $this->formRespond('error', $error);
+    }
+
+    /**
+     * @param $message
+     * @return mixed
+     */
+    public function respondWithMessage($message)
+    {
+        return $this->formRespond('message', $message);
     }
 
     /**
@@ -68,5 +76,14 @@ class BaseController extends Controller
     public function setTransformer($transformer)
     {
         $this->transformer = $transformer;
+    }
+
+    /**
+     * @param $respond
+     * @param $message
+     * @return string
+     */
+    protected function formRespond($respond, $message) {
+        return json_encode([$respond => $message]);
     }
 }
