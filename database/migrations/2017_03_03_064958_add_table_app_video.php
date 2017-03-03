@@ -17,6 +17,7 @@ class AddTableAppVideo extends Migration
             $table->increments('id');
             $table->string('url')->default('');
             $table->integer('status');
+            $table->integer('start_time')->unsigned();
             $table->integer('duration')->unsigned();
             $table->integer('user_id')->unsigned();
 
