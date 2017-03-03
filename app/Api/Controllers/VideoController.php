@@ -1,11 +1,14 @@
 <?php
 namespace App\Api\Controllers;
 
+use App\Api\Transformers\Video\VideoTransformer;
+use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
 use Validator;
 use Storage;
+use Auth;
 
 class VideoController extends BaseController
 {
@@ -35,7 +38,10 @@ class VideoController extends BaseController
 
     public function getList(Request $request)
     {
-        
+        $this->setTransformer(new VideoTransformer());
+        $videos = AppVideo::where('user_id', Auth::id())->get();
+
+        return $this->respondWithItems($videos);
     }
 
     public function restartFailed(Request $request)
