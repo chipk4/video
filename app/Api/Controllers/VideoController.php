@@ -2,10 +2,13 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\VideoFile\Upload;
+use App\Helpers\File;
+use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
 use Validator;
+use Storage;
 
 class VideoController extends BaseController
 {
@@ -24,9 +27,10 @@ class VideoController extends BaseController
 
         $video = new AppVideo();
         $video->saveVideo($request);
+        $fileUrl = storage_path('app').DIRECTORY_SEPARATOR.$video->url;
 
         if($video->id) {
-            $job = new UploadCutVideo($video);
+            $job = new UploadCutVideo($video, $fileUrl);
             $this->dispatch($job);
             return $this->respondWithItem($video->id);
         }
@@ -49,7 +53,7 @@ class VideoController extends BaseController
         return Validator::make($data, [
             'duration' => 'required|int',
             'start_time' => 'required|int',
-            'video' => 'required|file'
+            'video' => 'required|file|mimes:mp4'
         ]);
     }
 
