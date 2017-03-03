@@ -2,16 +2,9 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\VideoFile\Upload;
-use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
-use Auth;
-use Carbon\Carbon;
-use Storage;
-use FFMpeg\Coordinate\TimeCode;
-use FFMpeg\FFMpeg;
-use FFMpeg\Format\Video\X264;
 
 class VideoController extends BaseController
 {
