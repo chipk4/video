@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class BaseController extends Controller
 {
     protected $itemKey = 'data';
+    protected $itemsKey = 'data';
 
     /**
      * Fractal Transformer instance.
@@ -20,6 +21,17 @@ class BaseController extends Controller
         if (method_exists($this, 'transformer')) {
             $this->transformer = $this->transformer();
         }
+    }
+
+    /**
+     * @param $items
+     * @return mixed
+     */
+    public function respondWithItems($items)
+    {
+        return response()->json([
+            $this->itemsKey => $this->transformItems($items)
+        ]);
     }
 
     /**
@@ -67,6 +79,20 @@ class BaseController extends Controller
     public function transform($item)
     {
         $result = $this->transformer->transform($item);
+        return $result;
+    }
+
+    /**
+     * @param $items
+     * @return array
+     */
+    protected function transformItems($items)
+    {
+        $result = [];
+        foreach($items as $item) {
+            $result[] = $resource = $this->transform($item);
+        }
+
         return $result;
     }
 
