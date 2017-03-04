@@ -111,12 +111,12 @@
                         "internalApiKey": []
                     }
                 ],
-                "description": "Get list of video by user",
+                "description": "Get list of video by user. For auth, put word <b>Bearer</b> and whitespace before your token",
                 "responses": {
                     "200": {
                         "description": "Successful response",
                         "schema": {
-                            "title": "Rresponse",
+                            "title": "Response",
                             "type": "object",
                             "properties": {
                                 "data": {
