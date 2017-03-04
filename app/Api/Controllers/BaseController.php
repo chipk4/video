@@ -59,9 +59,10 @@ class BaseController extends Controller
      */
     public function respondWithItems($items)
     {
-        return response()->json([
-            $this->itemsKey => $this->transformItems($items)
-        ]);
+        return response()->json(
+            [ $this->itemsKey => $this->transformItems($items) ],
+            $this->statusCode
+        );
     }
 
     /**
@@ -78,7 +79,7 @@ class BaseController extends Controller
         $resultMerged = array_merge($resource, $additionalFields);
         $result[$this->itemKey] = $resultMerged;
 
-        return response()->json($result);
+        return response()->json($result, $this->statusCode);
     }
 
     /**
