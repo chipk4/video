@@ -2,6 +2,7 @@
 namespace App\Api\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class BaseController extends Controller
@@ -54,10 +55,26 @@ class BaseController extends Controller
     }
 
     /**
+     * @param LengthAwarePaginator $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithPagination(LengthAwarePaginator $data)
+    {
+        $items = $this->transformItems($data->items());
+
+        return response()->json([
+            $this->itemsKey => $items,
+            'total'         => $data->total(),
+            'currentPage'   => $data->currentPage(),
+            'lastPage'      => $data->lastPage()
+        ], $this->getStatusCode());
+    }
+
+    /**
      * @param $items
      * @return mixed
      */
-    public function respondWithItems($items)
+    protected function respondWithItems($items)
     {
         return response()->json(
             [ $this->itemsKey => $this->transformItems($items) ],
