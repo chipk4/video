@@ -14,6 +14,7 @@ class AppVideo extends Model {
     const PROCESS_PROCESSING = 2;
     const PROCESS_DONE = 3;
     const PROCESS_FAILED = 4;
+    const DEFAULT_PER_PAGE = 5;
 
     public function saveVideo(Request $request)
     {

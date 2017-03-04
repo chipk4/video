@@ -2,6 +2,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\Video\VideoTransformer;
+use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
@@ -34,12 +35,12 @@ class VideoController extends BaseController
         return $this->respondWithError('Can not save video');
     }
 
-    public function getList()
+    public function getList($page = null)
     {
         $this->setTransformer(new VideoTransformer());
-        $videos = AppVideo::where('user_id', Auth::id())->get();
+        $videos = AppVideo::where('user_id', Auth::id())->paginate(AppVideo::DEFAULT_PER_PAGE);
 
-        return $this->respondWithItems($videos);
+        return $this->respondWithPagination($videos);
     }
 
     public function restartFailed(Request $request)
