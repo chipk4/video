@@ -17,6 +17,6 @@ Route::group(['prefix' => 'v0.1', 'as' => 'api.'], function () {
     Route::post('auth/login', 'AuthController@login')->name('login');
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('video/upload', 'VideoController@upload')->name('video_upload');
-        Route::get('video/list', 'VideoController@getList')->name('video.lost');
+        Route::get('video/list/{page?}', 'VideoController@getList')->name('video.lost');
     });
 });
