@@ -10,6 +10,13 @@ class BaseController extends Controller
     protected $itemsKey = 'data';
 
     /**
+     * HTTP header status code.
+     *
+     * @var int
+     */
+    protected $statusCode = 200;
+
+    /**
      * Fractal Transformer instance.
      *
      * @var \League\Fractal\TransformerAbstract
@@ -21,6 +28,29 @@ class BaseController extends Controller
         if (method_exists($this, 'transformer')) {
             $this->transformer = $this->transformer();
         }
+    }
+
+    /**
+     * Getter for statusCode.
+     *
+     * @return int
+     */
+    protected function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * Setter for statusCode.
+     *
+     * @param int $statusCode
+     * @return self
+     */
+    protected function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
     }
 
     /**
@@ -55,20 +85,26 @@ class BaseController extends Controller
      * Response with the current error.
      *
      * @param string $error
+     * @param int $errorCode
      *
      * @return mixed
      */
-    protected function respondWithError($error)
+    protected function respondWithError($error, $errorCode = 400)
     {
+        $this->setStatusCode($errorCode);
+
         return $this->formRespond('error', $error);
     }
 
     /**
-     * @param $message
+     * @param string $message
+     * @param int $statusCode
      * @return mixed
      */
-    public function respondWithMessage($message)
+    public function respondWithMessage($message, $statusCode = 200)
     {
+        $this->setStatusCode($statusCode);
+
         return $this->formRespond('message', $message);
     }
 
@@ -110,6 +146,9 @@ class BaseController extends Controller
      * @return string
      */
     protected function formRespond($respond, $message) {
-        return json_encode([$respond => $message]);
+        return response()->json(
+            [$respond => $message],
+            $this->getStatusCode()
+        );
     }
 }
