@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Auth;
@@ -16,6 +15,10 @@ class AppVideo extends Model {
     const PROCESS_FAILED = 4;
     const DEFAULT_PER_PAGE = 5;
 
+    /**
+     * @param Request $request
+     * @return $this
+     */
     public function saveVideo(Request $request)
     {
         $this->status = self::PROCESS_SCHEDULED;
@@ -32,12 +35,24 @@ class AppVideo extends Model {
         return $this;
     }
 
+    /**
+     * Return video list by user
+     * @param int $userId
+     * @param int $page
+     */
+    public function getByUser(int $userId, int $page = 1)
+    {
+        return $this->where('user_id', $userId)->paginate(AppVideo::DEFAULT_PER_PAGE, ['*'], 'page', $page);
+    }
+
+    /**
+     * @param Request $request
+     * @return false|string
+     */
     protected function storeVideoFile(Request $request)
     {
         $filePath = 'video'.DIRECTORY_SEPARATOR.$this->user_id.DIRECTORY_SEPARATOR.$this->id;
 
-        $path = $request->file('video')->store($filePath);
-
-        return $path;
+        return $request->file('video')->store($filePath);
     }
 }

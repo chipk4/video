@@ -38,7 +38,7 @@ class VideoController extends BaseController
     public function getList($page = null)
     {
         $this->setTransformer(new VideoTransformer());
-        $videos = AppVideo::where('user_id', Auth::id())->paginate(AppVideo::DEFAULT_PER_PAGE);
+        $videos = (new AppVideo())->getByUser(Auth::id(), $page);
 
         return $this->respondWithPagination($videos);
     }
