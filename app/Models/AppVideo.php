@@ -35,6 +35,12 @@ class AppVideo extends Model {
         return $this;
     }
 
+    public function cutVideo()
+    {
+        $ffmpeg = new Ffmpeg($this);
+        $ffmpeg->cutVideo();
+    }
+
     /**
      * Return video list by user
      * @param int $userId

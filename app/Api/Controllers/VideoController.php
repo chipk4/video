@@ -2,12 +2,10 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\Video\VideoTransformer;
-use App\Helpers\Helper;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;
 use Validator;
-use Storage;
 use Auth;
 
 class VideoController extends BaseController
@@ -24,10 +22,9 @@ class VideoController extends BaseController
 
         $video = new AppVideo();
         $video->saveVideo($request);
-        $fileUrl = env('UPLOAD_PATH').DIRECTORY_SEPARATOR.$video->url;
 
         if($video->id) {
-            $job = new UploadCutVideo($video, $fileUrl);
+            $job = new UploadCutVideo($video);
             $this->dispatch($job);
             return $this->respondWithMessage('File was added to queue');
         }
