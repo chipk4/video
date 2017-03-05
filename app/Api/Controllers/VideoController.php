@@ -35,7 +35,7 @@ class VideoController extends BaseController
         return $this->respondWithError('Can not save video');
     }
 
-    public function getList($page = null)
+    public function getList($page = 1)
     {
         $this->setTransformer(new VideoTransformer());
         $videos = (new AppVideo())->getByUser(Auth::id(), $page);
