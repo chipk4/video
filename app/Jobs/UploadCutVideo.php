@@ -14,7 +14,6 @@ class UploadCutVideo implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $video;
-    protected $fileUrl;
 
     /**
      * Create a new job instance.
