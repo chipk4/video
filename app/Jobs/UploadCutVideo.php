@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use App\Models\AppVideo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -14,7 +15,6 @@ class UploadCutVideo implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $video;
-    protected $fileUrl;
 
     /**
      * Create a new job instance.
@@ -32,26 +32,19 @@ class UploadCutVideo implements ShouldQueue
      */
     public function handle()
     {
-        $this->setVideoStatus(AppVideo::PROCESS_PROCESSING);
+        $this->video->setVideoStatus(AppVideo::PROCESS_PROCESSING);
 
         $this->video->cutVideo();
 
-        $this->setVideoStatus(AppVideo::PROCESS_DONE);
+        $this->video->setVideoStatus(AppVideo::PROCESS_DONE);
     }
 
-    public function failed()
+    public function failed(Exception $exception)
     {
-        $this->setVideoStatus(AppVideo::PROCESS_FAILED);
-    }
-
-    protected function setVideoStatus(int $status) {
-        $this->video->status = $status;
-        if(!$this->video->save()) {
-            Log::error('Can not save video status', [
-                'video' => $this->video->id,
-                'user' => $this->video->user_id,
-                'status' => $status
-            ]);
-        }
+        Log::error('Job failed', [
+            'videoId' => $this->video->id,
+            'error' => $exception->getMessage()
+        ]);
+        $this->video->setVideoStatus(AppVideo::PROCESS_FAILED);
     }
 }
