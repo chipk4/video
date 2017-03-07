@@ -35,6 +35,17 @@ class AppVideo extends Model {
         return $this;
     }
 
+    public function setVideoStatus(int $status)
+    {
+        if(!$this->save()) {
+            Log::error('Can not save video status', [
+                'video' => $this->id,
+                'user' => $this->user_id,
+                'status' => $status
+            ]);
+        }
+    }
+
     public function cutVideo()
     {
         $ffmpeg = new Ffmpeg($this);
@@ -46,7 +57,7 @@ class AppVideo extends Model {
      * @param int $userId
      * @param int $page
      */
-    public function getByUser(int $userId, int $page = 1)
+    public function getByUser(int $userId, int $page)
     {
         return $this->where('user_id', $userId)->paginate(AppVideo::DEFAULT_PER_PAGE, ['*'], 'page', $page);
     }
