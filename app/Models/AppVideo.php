@@ -1,11 +1,14 @@
 <?php
 namespace App\Models;
 
+use App\Models\Conversion\Contracts\Video\Video;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Auth;
+use Storage;
 
-class AppVideo extends Model {
+class AppVideo extends Model implements Video
+{
 
     protected $table = 'app_video_list';
 
@@ -46,12 +49,6 @@ class AppVideo extends Model {
         }
     }
 
-    public function cutVideo()
-    {
-        $ffmpeg = new Ffmpeg($this);
-        $ffmpeg->cutVideo();
-    }
-
     /**
      * Return video list by user
      * @param int $userId
@@ -71,5 +68,35 @@ class AppVideo extends Model {
         $filePath = 'video'.DIRECTORY_SEPARATOR.$this->user_id.DIRECTORY_SEPARATOR.$this->id;
 
         return $request->file('video')->store($filePath);
+    }
+
+    /**
+     * Get real path to video file
+     *
+     * @return string
+     */
+    public function videoPath()
+    {
+        return Storage::getDriver()->getAdapter()->getPathPrefix().$this->url;
+    }
+
+    /**
+     * Get the time for result video duration
+     *
+     * @return int
+     */
+    public function duration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * The time from which the cutting begins
+     *
+     * @return int
+     */
+    public function startTime()
+    {
+        return $this->start_time;
     }
 }
