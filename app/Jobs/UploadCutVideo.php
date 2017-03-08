@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Models\Conversion\Contracts\Video\Video as ContractVideo;
+use App\Models\Conversion\Ffmpeg;
 use Exception;
-use App\Models\AppVideo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,9 +19,9 @@ class UploadCutVideo implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * @param AppVideo $video
+     * @param ContractVideo $video
      */
-    public function __construct(AppVideo $video)
+    public function __construct(ContractVideo $video)
     {
         $this->video = $video;
     }
@@ -30,13 +31,13 @@ class UploadCutVideo implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(Ffmpeg $videoConverter)
     {
-        $this->video->setVideoStatus(AppVideo::PROCESS_PROCESSING);
+//        $this->video->setVideoStatus(AppVideo::PROCESS_PROCESSING);
 
-        $this->video->cutVideo();
+        $videoConverter->cutVideo($this->video);
 
-        $this->video->setVideoStatus(AppVideo::PROCESS_DONE);
+//        $this->video->setVideoStatus(AppVideo::PROCESS_DONE);
     }
 
     public function failed(Exception $exception)
@@ -45,6 +46,6 @@ class UploadCutVideo implements ShouldQueue
             'videoId' => $this->video->id,
             'error' => $exception->getMessage()
         ]);
-        $this->video->setVideoStatus(AppVideo::PROCESS_FAILED);
+//        $this->video->setVideoStatus(AppVideo::PROCESS_FAILED);
     }
 }
