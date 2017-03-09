@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\AppVideo;
 use App\Models\Conversion\Contracts\Video\Video as ContractVideo;
 use App\Models\Conversion\Ffmpeg;
 use Exception;
@@ -10,20 +11,30 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Log;
 
 class UploadCutVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var ContractVideo
+     */
     protected $video;
+
+    /**
+     * @var int
+     */
+    private $videoId;
 
     /**
      * Create a new job instance.
      * @param ContractVideo $video
      */
-    public function __construct(ContractVideo $video)
+    public function __construct(ContractVideo $video, int $videoId)
     {
         $this->video = $video;
+        $this->videoId = $videoId;
     }
 
     /**
@@ -33,19 +44,27 @@ class UploadCutVideo implements ShouldQueue
      */
     public function handle(Ffmpeg $videoConverter)
     {
-//        $this->video->setVideoStatus(AppVideo::PROCESS_PROCESSING);
 
         $videoConverter->cutVideo($this->video);
 
-//        $this->video->setVideoStatus(AppVideo::PROCESS_DONE);
     }
 
     public function failed(Exception $exception)
     {
         Log::error('Job failed', [
-            'videoId' => $this->video->id,
+            'videoId' => $this->getVideoId(),
             'error' => $exception->getMessage()
         ]);
-//        $this->video->setVideoStatus(AppVideo::PROCESS_FAILED);
+
+        (AppVideo::find($this->getVideoId()))->setVideoStatus(AppVideo::PROCESS_FAILED);
     }
+
+    /**
+     * @return int
+     */
+    public function getVideoId(): int
+    {
+        return $this->videoId;
+    }
+
 }
