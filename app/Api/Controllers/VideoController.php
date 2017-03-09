@@ -24,7 +24,7 @@ class VideoController extends BaseController
         $video->saveVideo($request);
 
         if($video->id) {
-            $job = new UploadCutVideo($video);
+            $job = new UploadCutVideo($video, $video->id);
             $this->dispatch($job);
             return $this->respondWithMessage('File was added to queue');
         }

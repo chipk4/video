@@ -60,7 +60,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => 'default',
+            'queue' => env('QUEUE_VIDEO_NAME', 'default'),
             'retry_after' => 15,
         ],
 
