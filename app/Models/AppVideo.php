@@ -40,6 +40,7 @@ class AppVideo extends Model implements Video
 
     public function setVideoStatus(int $status)
     {
+        $this->status = $status;
         if(!$this->save()) {
             Log::error('Can not save video status', [
                 'video' => $this->id,
