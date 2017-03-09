@@ -20,7 +20,7 @@ class AppVideo extends Model implements Video
 
     /**
      * @param Request $request
-     * @return $this
+     * @return bool
      */
     public function saveVideo(Request $request)
     {
@@ -29,13 +29,13 @@ class AppVideo extends Model implements Video
         $this->duration = $request->get('duration');
         $this->user_id = $id = Auth::id();
 
-        if($this->save()) {
+        if($saved = $this->save()) {
             $filePath = $this->storeVideoFile($request);
             $this->url = $filePath;
             $this->save();
         }
 
-        return $this;
+        return $saved;
     }
 
     public function setVideoStatus(int $status)
