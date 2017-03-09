@@ -1,7 +1,7 @@
 <?php
-namespace App\Api\Controllers;
+namespace App\Api\v01\Controllers;
 
-use App\Api\Transformers\Auth\LoginTransformer;
+use App\Api\v01\Transformers\Auth\LoginTransformer;
 use Illuminate\Http\Request;
 use Auth;
 

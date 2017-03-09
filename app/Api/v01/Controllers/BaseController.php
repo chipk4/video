@@ -1,5 +1,5 @@
 <?php
-namespace App\Api\Controllers;
+namespace App\Api\v01\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
