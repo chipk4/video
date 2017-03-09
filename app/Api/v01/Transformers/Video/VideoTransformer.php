@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chipkA
- * Date: 3/2/17
- * Time: 8:42 PM
- */
 
-namespace App\Api\Transformers\Video;
+namespace App\Api\v01\Transformers\Video;
 
 use App\Helpers\File;
 use App\Models\AppVideo;
@@ -25,12 +19,13 @@ class VideoTransformer extends TransformerAbstract
 
     protected function returnVideoUrls(AppVideo $item)
     {
+        $baseUrl = env('VIDEO_URL').'/';
         $videoUrls = [
-            'origin' => env('VIDEO_URL').'/'.$item->url,
+            'origin' => $baseUrl.$item->url,
             'cut' => ''
         ];
         if($item->status == AppVideo::PROCESS_DONE) {
-            $videoUrls['cut'] = env('VIDEO_URL').'/'.File::setNewName($item->url, env('CUT_FILE_NAME'));
+            $videoUrls['cut'] = $baseUrl.File::setNewName($item->url, env('CUT_FILE_NAME'));
         }
         return $videoUrls;
     }

@@ -1,7 +1,7 @@
 <?php
-namespace App\Api\Controllers;
+namespace App\Api\v01\Controllers;
 
-use App\Api\Transformers\Video\VideoTransformer;
+use App\Api\v01\Transformers\Video\VideoTransformer;
 use App\Jobs\UploadCutVideo;
 use App\Models\AppVideo;
 use Illuminate\Http\Request;

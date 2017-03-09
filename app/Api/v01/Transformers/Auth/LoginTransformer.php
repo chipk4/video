@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chipkA
- * Date: 3/2/17
- * Time: 8:42 PM
- */
 
-namespace App\Api\Transformers\Auth;
+namespace App\Api\v01\Transformers\Auth;
 
 use League\Fractal\TransformerAbstract;
 
